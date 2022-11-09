@@ -25,3 +25,13 @@ def protein_sequence_processing(protein_seq, length=1):
         data=protein_sequence_dict, index=sorted(protein_sequence_dict))
 
     return protein_sequence_series
+
+
+# input dataset: pd.DataFrame, length: the dividing number of amino sequence (default=1)
+# output dataset: pd.Dataframe with the number of amino
+def to_amino_num_features_dataset(dataset: pd.DataFrame, length=1):
+    amino_feature = pd.DataFrame()
+    for protein_sequence in dataset['protein_sequence']:
+        amino_series = protein_sequence_processing(protein_sequence, length)
+        amino_feature = pd.concat([amino_feature, amino_series], axis=0)
+    return pd.concat([amino_feature, dataset['pH']], axis=1)
