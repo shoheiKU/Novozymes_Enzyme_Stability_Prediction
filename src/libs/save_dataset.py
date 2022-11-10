@@ -1,5 +1,6 @@
 import pandas as pd
 import itertools
+import tqdm
 AMINO_SET = {'A', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
              'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'V', 'W', 'Y'}
 
@@ -31,7 +32,7 @@ def protein_sequence_processing(protein_seq, length=1):
 # output dataset: pd.Dataframe with the number of amino
 def to_amino_num_features_dataset(dataset: pd.DataFrame, length=1):
     amino_feature = pd.DataFrame()
-    for protein_sequence in dataset['protein_sequence']:
+    for protein_sequence in tqdm.tqdm(dataset['protein_sequence']):
         amino_series = protein_sequence_processing(protein_sequence, length)
-        amino_feature = pd.concat([amino_feature, amino_series], axis=0)
+        amino_feature = amino_feature.append(amino_series, ignore_index=True)
     return pd.concat([amino_feature, dataset['pH']], axis=1)
