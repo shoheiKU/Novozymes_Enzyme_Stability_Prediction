@@ -43,10 +43,10 @@ def to_amino_num_features_dataset(dataset: pd.DataFrame, length=1):
 def add_classified_num_dataset(dataset: pd.DataFrame, match_ratio_threshold = 0.5):
     added_dataframe = pd.DataFrame(columns=['classified_number'])
     classified_number = 0
-    pre_sequence = dataset.at[dataset.index[0],'protein_sequence']
+    original_sequence = dataset.at[dataset.index[0],'protein_sequence']
     for index_num, protein_sequence in tqdm.tqdm(enumerate(dataset['protein_sequence'])):
         added_dataframe.at[dataset.index[index_num],'classified_number'] = classified_number
-        if SM(None, protein_sequence, pre_sequence).ratio() < match_ratio_threshold:
-            pre_sequence = protein_sequence
+        if SM(None, protein_sequence, original_sequence).ratio() < match_ratio_threshold:
+            original_sequence = protein_sequence
             classified_number += 1
     return pd.concat([dataset, added_dataframe], axis=1)
