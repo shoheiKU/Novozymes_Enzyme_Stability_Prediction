@@ -40,16 +40,13 @@ def to_amino_num_features_dataset(dataset: pd.DataFrame, length=1):
 
 # input dataset: pd.DataFrame with 'protein_sequence'
 # output dataset: pd.DataFrame added classified number, match_percent_threshold is the threshold of theconsistency rate.
-def add_classified_num_dataset(dataset: pd.DataFrame, match_percent_threshold = 50):
+def add_classified_num_dataset(dataset: pd.DataFrame, match_ratio_threshold = 0.5):
     added_dataframe = pd.DataFrame(columns=['classified_number'])
-    classified_number = int(0)
+    classified_number = 0
     pre_sequence = dataset.at[dataset.index[0],'protein_sequence']
     for index_num, protein_sequence in tqdm.tqdm(enumerate(dataset['protein_sequence'])):
-        #sub_dataframe = pd.DataFrame(columns='classified_number')
-        #sub_dataframe['classified_number'] = classified_number
-        #pd.concat([added_dataframe, sub_dataframe], axis=0)
         added_dataframe.at[dataset.index[index_num],'classified_number'] = classified_number
-        if SM(None, protein_sequence, pre_sequence).ratio()*100 < match_percent_threshold:
+        if SM(None, protein_sequence, pre_sequence).ratio() < match_ratio_threshold:
             pre_sequence = protein_sequence
             classified_number += 1
     return pd.concat([dataset, added_dataframe], axis=1)
