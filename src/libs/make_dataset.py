@@ -44,10 +44,12 @@ def to_amino_num_features_dataset(dataset: pd.DataFrame, length=1):
         amino_feature = amino_feature.append(amino_series, ignore_index=True)
     return pd.concat([amino_feature, dataset['pH']], axis=1)
 
-# input dataset: pd.DataFrame with 'protein_sequence'
-# output dataset: pd.DataFrame added classified number, match_percent_threshold is the threshold of theconsistency rate.
 
-
+# input:
+#   dataset: (pd.DataFrame) input dataset with 'protein_sequence',
+#   match_percent_threshold: (float) threshold of the consistency rate.
+# output:
+#   dataset: (pd.DataFrame) dataset added classified number
 def add_classified_num_dataset(dataset: pd.DataFrame, match_ratio_threshold=0.5):
     added_dataframe = pd.DataFrame(columns=['classified_number'])
     classified_number = 0
